@@ -14,7 +14,7 @@ from shot import Shot
 from particle import Particle
 from constants import PARTICLE_COUNT
 from powerup import PowerUp
-from powerup import POWERUP_TYPES
+from powerup import choose_powerup_to_spawn
 from constants import POWERUP_SPAWN_RATE_SECONDS
 from constants import POWERUP_DURATION_SECONDS
 
@@ -128,12 +128,12 @@ def main():
             if powerup_spawn_timer >= POWERUP_SPAWN_RATE_SECONDS:
                 powerup_spawn_timer = 0.0
                 existing_types = {p.powerup_type for p in state["powerups"]}
-                missing_types = [t for t in POWERUP_TYPES if t not in existing_types]
-                if missing_types:
+                spawn_type = choose_powerup_to_spawn(existing_types)
+                if spawn_type is not None:
                     PowerUp(
                         random.uniform(40, SCREEN_WIDTH - 40),
                         random.uniform(40, SCREEN_HEIGHT - 40),
-                        powerup_type=random.choice(missing_types),
+                        powerup_type=spawn_type,
                     )
 
             if rapid_fire_time > 0:

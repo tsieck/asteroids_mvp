@@ -41,11 +41,20 @@ class Asteroid(CircleShape):
     def _generate_craters(self):
         craters = []
         crater_count = random.randint(2, 5)
-        for _ in range(crater_count):
+        attempts = 0
+        while len(craters) < crater_count and attempts < crater_count * 12:
+            attempts += 1
             angle = random.uniform(0, 2 * math.pi)
             distance = self.radius * random.uniform(0.15, 0.6)
             offset = pygame.Vector2(math.cos(angle), math.sin(angle)) * distance
             crater_radius = self.radius * random.uniform(0.12, 0.28)
+            overlaps = False
+            for existing_offset, existing_radius in craters:
+                if offset.distance_to(existing_offset) < (crater_radius + existing_radius):
+                    overlaps = True
+                    break
+            if overlaps:
+                continue
             craters.append((offset, crater_radius))
         return craters
 

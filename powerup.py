@@ -18,6 +18,12 @@ POWERUP_COLORS = {
     "shotgun": (255, 20, 147),    # neon pink
 }
 
+def choose_powerup_to_spawn(existing_types):
+    missing_types = [t for t in POWERUP_TYPES if t not in existing_types]
+    if not missing_types:
+        return None
+    return random.choice(missing_types)
+
 
 class PowerUp(CircleShape):
     def __init__(self, x, y, powerup_type=None):
